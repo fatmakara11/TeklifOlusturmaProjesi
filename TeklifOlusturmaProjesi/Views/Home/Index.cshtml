@@ -1,0 +1,132 @@
+﻿@model IEnumerable<ORM.Models.Models.Musteri>
+
+@{
+    ViewData["Title"] = "Home Page";
+    List<ORM.Models.Models.Musteri> musteriler = ViewBag.Musteri;
+    List<ORM.Models.Models.AracıKurum> aracıKurumlar = ViewBag.AracıKurum;
+}
+
+<div class="custom-container">
+    <div class="top-section">
+        <div class="left-section">
+            <div class="custom-section">
+                <label for="musteri">Müşteri Seçiniz:</label>
+                <div class="dropdown-container">
+                    <select id="musteri">
+                        @foreach (var musteri in musteriler)
+                        {
+                            <option value="@musteri.MusteriID">@musteri.MusteriAdı</option>
+                        }
+
+                    </select>
+                    <button type="button" id="musteriEkle" class="add-button">+</button>
+                </div>
+            </div>
+
+            <div class="custom-section">
+                <label for="araciKurum">Aracı Kurum Seçiniz:</label>
+                <div class="dropdown-container">
+                    <select id="araciKurum">
+                        @foreach (var aracıKurum in aracıKurumlar)
+                        {
+                            <option value="@aracıKurum.AracıKurumID">@aracıKurum.AracıKurumAdı</option>
+                        }
+                    </select>
+                    <button id="aracıKurumEkle" class="add-button">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <div class="custom-section">
+                <label for="urun">Ürün Seçiniz:</label>
+                <div class="dropdown-container">
+                    <select id="urun">
+                        <option value="" disabled selected>Ürün seçiniz</option>
+                        <!-- Dinamik olarak gelecek ürün listesi -->
+                    </select>
+
+                </div>
+                <div class="urun-detay">
+                    <div>
+                        <label for="birim">Birimi:</label>
+                        <input type="text" id="birim" disabled>
+                    </div>
+                    <div>
+                        <label for="birimFiyat">Birim Fiyat:</label>
+                        <input type="text" id="birimFiyat" enabled>
+                    </div>
+                    <div>
+                        <label for="stokAdedi">Stok Adedi:</label>
+                        <input type="text" id="stokAdedi" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-section">
+        <div class="custom-section">
+            <label for="adet">Adet Giriniz:</label>
+            <input type="number" id="adet" min="1" placeholder="Adet giriniz">
+        </div>
+
+        <div class="custom-section">
+            <button id="teklifOlustur" class="submit-button btn btn-primary btn-lg btn-block">Teklif Oluştur</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal HTML -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Yeni Eklemek İçin</h2>
+        <label for="newItem">İsmini Giriniz:</label>
+        <input type="text" id="newItem" placeholder="Bilgi giriniz">
+        <button id="addButton" type="button" class="add-button btn-primary mt-5 mb-3">Ekle</button>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById('modal');
+        const closeModal = document.querySelector('.modal .close');
+        const addButton = document.getElementById('addButton');
+        const modalTitle = document.getElementById('modalTitle');
+
+        document.getElementById('musteriEkle').onclick = () => openModal('Müşteri Ekle');
+        document.getElementById('aracıKurumEkle').onclick = () => openModal('Aracı Kurum Ekle');
+        document.getElementById('urunEkle').onclick = () => openModal('Ürün Ekle');
+
+        closeModal.onclick = () => closeModalFunc();
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                closeModalFunc();
+            }
+        };
+
+        addButton.onclick = () => {
+            const element = document.getElementById('modalTitle').className
+            const newItem = document.getElementById('newItem').value;
+            $.post("Home/Add", { element: element, newItem: newItem },
+                function (data) {
+                    alert(data);
+                });
+        };
+
+        function openModal(title) {
+            modalTitle.innerText = title;
+            if (title == "Müşteri Ekle") {
+                modalTitle.className = "musteri";
+            } else {
+                modalTitle.className = "aracı_kurum";
+            }
+
+            modal.style.display = 'block';
+        }
+
+        function closeModalFunc() {
+            modal.style.display = 'none';
+        }
+    });
+</script>

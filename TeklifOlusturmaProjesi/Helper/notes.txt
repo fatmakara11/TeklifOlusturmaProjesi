@@ -1,0 +1,22 @@
+﻿tools-NuGet package manager-package manager console
+
+dotnet add package Microsoft.Data.SqlClient --version 5.1.2
+dotnet add package Dapper.Extension.NetCore --version 5.1.4
+dotnet add package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation --version 8.0.1
+ 
+
+ eklendikten sonraki kontrolu projenin adına tıklayınca 
+ <ItemGroup>
+    <PackageReference Include="Dapper.Extensions.NetCore" Version="5.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.7" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.1" />
+  </ItemGroup>
+
+  bu şekilde gelmeli
+  
+
+  2-daha sonda models içine classlarımızı yazmalıyız(prop)
+  3-Data adında yeni bir klasör oluştururuz
+  bir tane interface oluştururuz(IDapperContext)
+  bi tane de class oluştururuz (DapperContex)
+  DapperContex e appsettings.json daki veri tabanımızın adı ile eşleştiririz

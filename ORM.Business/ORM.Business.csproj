@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ORM.DB\ORM.DB.csproj" />
+    <ProjectReference Include="..\ORM.Models\ORM.Models.csproj" />
+    <ProjectReference Include="..\TeklifOlusturmaProjesi\TeklifOlusturmaProjesi.csproj" />
+  </ItemGroup>
+
+</Project>

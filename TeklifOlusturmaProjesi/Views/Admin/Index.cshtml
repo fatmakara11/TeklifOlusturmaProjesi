@@ -1,0 +1,201 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teklif Oluşturma Sayfası</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+select, input[type="text"], input[type="number"] {
+    width: calc(100% - 24px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+input[type="text"]:disabled,
+input[type="number"]:disabled {
+    background-color: #e9ecef;
+}
+
+.add-button {
+    padding: 6px 10px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+.urun-detay {
+    display: flex;
+    justify-content: space-between;
+}
+
+.urun-detay div {
+    flex-basis: 30%;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-button:hover {
+    background-color: #218838;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+</style>
+<body>
+    <div class="container">
+        <div class="section">
+            <label for="musteri">Müşteri Seçiniz:</label>
+            <select id="musteri">
+                <option value="" disabled selected>Müşteri seçiniz</option>
+                <!-- Burada veritabanından gelen müşteriler listelenecek -->
+                <option value="musteri1">Müşteri 1</option>
+                <option value="musteri2">Müşteri 2</option>
+            </select>
+            <button id="musteriEkle" class="add-button">+</button>
+        </div>
+
+        <div class="section">
+            <label for="araciKurum">Aracı Kurum Seçiniz:</label>
+            <select id="araciKurum">
+                <option value="" disabled selected>Aracı kurum seçiniz</option>
+                <!-- Burada veritabanından gelen aracı kurumlar listelenecek -->
+                <option value="kurum1">Aracı Kurum 1</option>
+                <option value="kurum2">Aracı Kurum 2</option>
+            </select>
+            <button id="araciKurumEkle" class="add-button">+</button>
+        </div>
+
+        <div class="section">
+            <label for="urun">Ürün Seçiniz:</label>
+            <select id="urun">
+                <option value="" disabled selected>Ürün seçiniz</option>
+                <!-- Burada veritabanından gelen ürünler listelenecek -->
+                <option value="urun1">Ürün 1</option>
+                <option value="urun2">Ürün 2</option>
+            </select>
+            <button id="urunEkle" class="add-button">+</button>
+            <div class="urun-detay">
+                <div>
+                    <label for="birim">Birimi:</label>
+                    <input type="text" id="birim" disabled>
+                </div>
+                <div>
+                    <label for="birimFiyat">Birim Fiyat:</label>
+                    <input type="text" id="birimFiyat" disabled>
+                </div>
+                <div>
+                    <label for="stokAdedi">Stok Adedi:</label>
+                    <input type="text" id="stokAdedi" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <label for="adet">Adet Giriniz:</label>
+            <input type="number" id="adet" min="1" placeholder="Adet giriniz">
+        </div>
+
+        <div class="section">
+            <button id="teklifOlustur" class="submit-button">Teklif Oluştur</button>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Buraya müşteri, aracı kurum veya ürün ekleme formu gelecek.</p>
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
