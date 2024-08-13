@@ -51,7 +51,7 @@ namespace ORM.DB.Repository
         {
             using (var connection = _context.CreateConnection())
             {
-                var query = "INSERT INTO Urun (ÜrünID, ÜrünAdı, Birim, BirimFiyat, StokAdeti, OlusturmaZamanı, GuncellemeZamanı, Aktif, Pasif) VALUES (@ÜrünID, @ÜrünAdı, @Birim, @BirimFiyat, @StokAdeti, @OlusturmaZamanı, @GuncellemeZamanı, @Aktif, @Pasif)";
+                var query = "INSERT INTO Urun (ÜrünID, ÜrünAdı, Birim, BirimFiyat, StokAdeti, OlusturmaZamanı, GüncellemeZamanı, Aktif, Pasif) VALUES (@ÜrünID, @ÜrünAdı, @Birim, @BirimFiyat, @StokAdeti, @OlusturmaZamanı, @GüncellemeZamanı, @Aktif, @Pasif)";
 
 
 
@@ -74,7 +74,8 @@ namespace ORM.DB.Repository
         {
             using (var connection = _context.CreateConnection())
             {
-                var query = "UPDATE Urun SET StokAdeti = StokAdeti - @Adet WHERE ÜrünID = @ÜrünID";
+                //var query = "UPDATE Urun SET StokAdeti = StokAdeti - @Adet WHERE ÜrünID = @ÜrünID";
+                var query = "UPDATE Urun SET Adet= @Adet WHERE ÜrünID = @ÜrünID";
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@ÜrünID", ÜrünID);
