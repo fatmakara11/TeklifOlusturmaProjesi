@@ -13,7 +13,7 @@ namespace ORM.DB.Repository
         Task<IEnumerable<Urun>> GetAllAsync();
         Task<Urun> GetById(Guid ÜrünID);
         Task AddUrun(Urun urun);
-        Task UpdateStok(Guid ÜrünID, int adet);
+        Task UpdateStok(Guid ÜrünID, int Adet);
     }
 
     public class UrunRepository : GenericRepository<Urun>, IUrunRepository
@@ -41,7 +41,7 @@ namespace ORM.DB.Repository
                 var query = "SELECT * FROM Urun WHERE ÜrünID = @ÜrünID";
 
                 var parameters = new DynamicParameters();
-                parameters.Add("ÜrünID", ÜrünID);
+                parameters.Add("@ÜrünID", ÜrünID);
 
                 return await connection.QuerySingleOrDefaultAsync<Urun>(query, parameters);
             }
@@ -51,19 +51,20 @@ namespace ORM.DB.Repository
         {
             using (var connection = _context.CreateConnection())
             {
-                var query = @"INSERT INTO Urun (ÜrünID, ÜrünAdı, Birim, BirimFiyat, StokAdeti, OlusturmaZamanı, GuncellemeZamanı, Aktif, Pasif) 
-                              VALUES (@ÜrünID, @ÜrünAdı, @Birim, @BirimFiyat, @StokAdeti, @OlusturmaZamanı, @GuncellemeZamanı, @Aktif, @Pasif)";
+                var query = "INSERT INTO Urun (ÜrünID, ÜrünAdı, Birim, BirimFiyat, StokAdeti, OlusturmaZamanı, GuncellemeZamanı, Aktif, Pasif) VALUES (@ÜrünID, @ÜrünAdı, @Birim, @BirimFiyat, @StokAdeti, @OlusturmaZamanı, @GuncellemeZamanı, @Aktif, @Pasif)";
+
+
 
                 var parameters = new DynamicParameters();
-                parameters.Add("ÜrünID", urun.ÜrünID);
-                parameters.Add("ÜrünAdı", urun.ÜrünAdı);
-                parameters.Add("Birim", urun.Birim);
-                parameters.Add("BirimFiyat", urun.BirimFiyat);
-                parameters.Add("StokAdeti", urun.StokAdeti);
-                parameters.Add("OlusturmaZamanı", urun.OlusturmaZamanı);
-                parameters.Add("GuncellemeZamanı", urun.GüncellemeZamanı);
-                parameters.Add("Aktif", urun.Aktif);
-                parameters.Add("Pasif", urun.Pasif);
+                parameters.Add("@ÜrünID", urun.ÜrünID);
+                parameters.Add("@ÜrünAdı", urun.ÜrünAdı);
+                parameters.Add("@Birim", urun.Birim);
+                parameters.Add("@BirimFiyat", urun.BirimFiyat);
+                parameters.Add("@StokAdeti", urun.StokAdeti);
+                parameters.Add("@OlusturmaZamanı", urun.OlusturmaZamanı);
+                parameters.Add("@GüncellemeZamanı", urun.GüncellemeZamanı);
+                parameters.Add("@Aktif", urun.Aktif);
+                parameters.Add("@Pasif", urun.Pasif);
 
                 await connection.ExecuteAsync(query, parameters);
             }
@@ -76,8 +77,8 @@ namespace ORM.DB.Repository
                 var query = "UPDATE Urun SET StokAdeti = StokAdeti - @Adet WHERE ÜrünID = @ÜrünID";
 
                 var parameters = new DynamicParameters();
-                parameters.Add("ÜrünID", ÜrünID);
-                parameters.Add("Adet", adet);
+                parameters.Add("@ÜrünID", ÜrünID);
+                parameters.Add("@Adet", adet);
 
                 await connection.ExecuteAsync(query, parameters);
             }

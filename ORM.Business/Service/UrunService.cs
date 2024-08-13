@@ -16,9 +16,9 @@ namespace ORM.Business.Service
         public interface IUrunService
         {
             Task<IEnumerable<Urun>> GetAllUrun();
-            Task<Urun> GetById(Guid urunID);
+            Task<Urun> GetById(Guid ÜrünID);
             Task AddUrun(Urun urun);
-            Task UpdateStok(Guid urunID, int adet);
+            Task UpdateStok(Guid ÜrünID, int StokAdeti);
         }
 
         public class UrunService : IUrunService
@@ -35,9 +35,9 @@ namespace ORM.Business.Service
                 return await _repository.GetAllAsync();
             }
 
-            public async Task<Urun> GetById(Guid urunID)
+            public async Task<Urun> GetById(Guid ÜrünID)
             {
-                return await _repository.GetById(urunID);
+                return await _repository.GetById(ÜrünID);
             }
 
             public async Task AddUrun(Urun urun)
@@ -45,9 +45,9 @@ namespace ORM.Business.Service
                 await _repository.AddUrun(urun);
             }
 
-            public async Task UpdateStok(Guid urunID, int adet)
+            public async Task UpdateStok(Guid ÜrünID, int StokAdeti)
             {
-                await _repository.UpdateStok(urunID, adet);
+                await _repository.UpdateStok(ÜrünID, StokAdeti);
             }
         }
     

@@ -11,24 +11,35 @@ namespace TeklifOlusturmaProjesi.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMusteriRepository _musteriRepository;
-        private readonly IAracıKurumRepository  _aracıKurumRepository;
+        private readonly IAracıKurumRepository _aracıKurumRepository;
         private readonly IUrunRepository _urunRepository;
-        public HomeController(ILogger<HomeController> logger, IMusteriRepository musteriRepository, IAracıKurumRepository aracıKurumRepository,IUrunRepository urunRepository)
+        public HomeController(ILogger<HomeController> logger, IMusteriRepository musteriRepository, IAracıKurumRepository aracıKurumRepository, IUrunRepository urunRepository)
         {
             _logger = logger;
             _musteriRepository = musteriRepository;
             _aracıKurumRepository = aracıKurumRepository;
             _urunRepository = urunRepository;
         }
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var musteriler = await _musteriRepository.GetAllAsync();
-            var aracıKurums = await _aracıKurumRepository.GetAllAsync(); // AracıKurum verisini alın
+            var aracıKurumlar = await _aracıKurumRepository.GetAllAsync(); // AracıKurum verisini alın
             var urunler = await _urunRepository.GetAllAsync();
-            ViewBag.Urunler = urunler;
+            ViewBag.Urun = urunler;
             ViewBag.Musteri = musteriler;
-            ViewBag.AracıKurum = aracıKurums; // ViewBag'e ekleyin
+            ViewBag.AracıKurum = aracıKurumlar; // ViewBag'e ekleyin
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Index(Teklif teklif)
+        {
+            var musteriler = await _musteriRepository.GetAllAsync();
+            var aracıKurumlar = await _aracıKurumRepository.GetAllAsync(); // AracıKurum verisini alın
+            var urunler = await _urunRepository.GetAllAsync();
+            ViewBag.Urun = urunler;
+            ViewBag.Musteri = musteriler;
+            ViewBag.AracıKurum = aracıKurumlar;
             return View();
         }
 
@@ -53,7 +64,7 @@ namespace TeklifOlusturmaProjesi.Controllers
         [HttpGet("aracıKurum")]
         public async Task<IActionResult> GetAracıKurum()
         {
-            var AracıKurum  = await _aracıKurumRepository.GetAllAsync();
+            var AracıKurum = await _aracıKurumRepository.GetAllAsync();
             return Json(AracıKurum);
         }
 
@@ -68,7 +79,7 @@ namespace TeklifOlusturmaProjesi.Controllers
             await _aracıKurumRepository.AddAracıKurum(aracıKurum);
             return Ok(new { Success = true });
         }
-        public async Task<ActionResult> AddAsync(string element,string newItem)
+        public async Task<ActionResult> Add(string element, string newItem)
         {
             try
             {
@@ -85,7 +96,6 @@ namespace TeklifOlusturmaProjesi.Controllers
                     };
                     await _musteriRepository.AddMusteri(musteri);
                     return Json(true);
-                    // kayıt musteri tabl
                 }
                 else if (element == "aracı_kurum")
                 {
@@ -103,18 +113,18 @@ namespace TeklifOlusturmaProjesi.Controllers
                 }
                 else
                 {
-                    return Json(true);
-                    // ARACI KURUM
+                    return Json(false);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error occurred while adding item");
                 return Json(false);
             }
-
         }
-        [HttpGet("urun")]
-        public async Task<IActionResult> GetUrunDetails(Guid ÜrünID)
+
+        [HttpGet("Home/GetUrunDetay/{ÜrünID}")]
+        public async Task<IActionResult> GetUrunDetay(Guid ÜrünID)
         {
             var urun = await _urunRepository.GetById(ÜrünID);
             if (urun == null)
@@ -122,44 +132,15 @@ namespace TeklifOlusturmaProjesi.Controllers
                 return NotFound();
             }
 
-            UrunDetails urunDetails = new UrunDetails
+            var urunDetay = new
             {
-                Birim = urun.Birim,
-                BirimFiyat = urun.BirimFiyat,
-                StokAdeti = urun.StokAdeti
+                birim = urun.Birim,
+                birimFiyat = urun.BirimFiyat,
+                stokAdeti = urun.StokAdeti
             };
 
-            return Json(urunDetails);
-        }
-
-        [HttpPost("urun")]
-        public async Task<IActionResult> AddUrun([FromBody] Urun urun)
-        {
-            if (urun == null || string.IsNullOrEmpty(urun.ÜrünAdı))
-            {
-                return BadRequest("Geçersiz ürün bilgisi.");
-            }
-
-            await _urunRepository.AddUrun(urun);
-            return Ok(new { Success = true });
-        }
-
-        [HttpPost("urun")]
-        public async Task<IActionResult> UpdateStok(Guid ÜrünID, int adet)
-        {
-            await _urunRepository.UpdateStok(ÜrünID, adet);
-            return Ok();
-        }
-      
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return Json(urunDetay);
         }
     }
+
 }
