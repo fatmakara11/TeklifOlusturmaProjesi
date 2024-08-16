@@ -12,6 +12,7 @@ builder.Services.AddSingleton<IDapperContext, DapperContext>();
 builder.Services.AddScoped<IMusteriRepository, MusteriRepository>();
 builder.Services.AddScoped<IAracýKurumRepository, AracýKurumRepository>();
 builder.Services.AddScoped<IUrunRepository, UrunRepository>();
+builder.Services.AddScoped<ITeklifRepository, TeklifRepository>();
 
 
 // Generic repository'yi scoped olarak ekleyin

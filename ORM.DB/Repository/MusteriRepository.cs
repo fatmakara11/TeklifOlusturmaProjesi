@@ -35,7 +35,7 @@ namespace ORM.DB.Repository
 
         public async Task AddMusteri(Musteri musteri)
         {
-            var query = "insert into Musteri (MusteriAdı) values (@MusteriAdı)";
+            var query = "İNSERT İNTO  Musteri (MusteriAdı) values (@MusteriAdı)";
             var parameters = new DynamicParameters();
             parameters.Add("@MusteriAdı", musteri.MusteriAdı);
 

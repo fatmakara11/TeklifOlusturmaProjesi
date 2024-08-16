@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TeklifOlusturmaProjesi.Models;
 
@@ -13,12 +15,17 @@ namespace TeklifOlusturmaProjesi.Controllers
         private readonly IMusteriRepository _musteriRepository;
         private readonly IAracıKurumRepository _aracıKurumRepository;
         private readonly IUrunRepository _urunRepository;
-        public HomeController(ILogger<HomeController> logger, IMusteriRepository musteriRepository, IAracıKurumRepository aracıKurumRepository, IUrunRepository urunRepository)
+        private readonly ITeklifRepository _teklifRepository;
+
+
+        public HomeController(ILogger<HomeController> logger, IMusteriRepository musteriRepository, IAracıKurumRepository aracıKurumRepository, IUrunRepository urunRepository, ITeklifRepository teklifRepository)
         {
             _logger = logger;
             _musteriRepository = musteriRepository;
             _aracıKurumRepository = aracıKurumRepository;
             _urunRepository = urunRepository;
+            _teklifRepository = teklifRepository;
+
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -26,21 +33,88 @@ namespace TeklifOlusturmaProjesi.Controllers
             var musteriler = await _musteriRepository.GetAllAsync();
             var aracıKurumlar = await _aracıKurumRepository.GetAllAsync(); // AracıKurum verisini alın
             var urunler = await _urunRepository.GetAllAsync();
+            var teklifler = await _teklifRepository.GetAllTekliflerAsync();
             ViewBag.Urun = urunler;
             ViewBag.Musteri = musteriler;
             ViewBag.AracıKurum = aracıKurumlar; // ViewBag'e ekleyin
+            ViewBag.Teklif = teklifler;
             return View();
         }
+
+
+
         [HttpPost]
         public async Task<IActionResult> Index(Teklif teklif)
         {
+
+
+
+            // TeklifID ve zaman bilgilerini oluşturma
+            teklif.TeklifID = Guid.NewGuid();
+            teklif.OlusturmaZamanı = DateTime.Now;
+            teklif.GüncellemeZamanı = DateTime.Now;
+
+            // Veritabanı işlemleri için repository'leri kullanarak ilgili verileri çekme
             var musteriler = await _musteriRepository.GetAllAsync();
-            var aracıKurumlar = await _aracıKurumRepository.GetAllAsync(); // AracıKurum verisini alın
+            var aracıKurumlar = await _aracıKurumRepository.GetAllAsync();
             var urunler = await _urunRepository.GetAllAsync();
+
+            // ViewBag'e gerekli verileri ekleyin
             ViewBag.Urun = urunler;
             ViewBag.Musteri = musteriler;
             ViewBag.AracıKurum = aracıKurumlar;
-            return View();
+
+            // Teklifi veritabanına ekleyin
+            bool result = _teklifRepository.AddTeklif(teklif);
+            if (result)
+            {
+                FilterReportModel filter = new FilterReportModel();
+                filter.MusteriID = teklif.MusteriID;
+                string w = $" WHERE {nameof(Teklif.MusteriID)} = '{filter.MusteriID}'";
+                // Fetch data from the repository using the custom query
+                var ret = _teklifRepository.GetAllByCustomQuery(w).ToList();
+
+                return PartialView("_PartialTeklifOlusturma", ret);
+            } 
+
+            // Tüm teklifleri yeniden veritabanından çekin ve tabloyu güncellemek için ViewBag'e atayın
+            var teklifler = await _teklifRepository.GetAllTekliflerAsync();
+            ViewBag.Teklifler = teklifler;
+
+            // View'ı geri döndürün partial 
+            return View(teklifler);
+
+
+        }
+        [HttpPost]
+        public IActionResult FilterTeklifler(FilterReportModel filter)
+        {
+            List<Teklif> ret = new List<Teklif>();
+
+            try
+            {
+                if (filter != null)
+                {
+                    // Create a custom query based on the filter inputs
+                    //bool result = _teklifRepository.AddTeklif(filter);
+                    string w = $" WHERE {nameof(Teklif.MusteriID)} = '{filter.MusteriID}'";
+                    // Fetch data from the repository using the custom query
+                    ret = _teklifRepository.GetAllByCustomQuery(w).ToList();
+                }
+
+                // Return the filtered results as a Partial View
+                return PartialView("_PartialTeklifOlusturma", ret);
+            }
+            catch (Exception ex)
+            {
+                // Error handling - logging or returning an error message
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        public IActionResult PartialTeklifOlusturma()
+        {
+            return PartialView("_PartialTeklifOlusturma");
         }
 
         [HttpGet]

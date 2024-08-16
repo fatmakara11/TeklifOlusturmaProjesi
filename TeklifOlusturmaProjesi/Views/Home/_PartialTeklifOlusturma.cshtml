@@ -1,0 +1,19 @@
+﻿@model IEnumerable<ORM.Models.Models.Teklif>
+@foreach (var teklif in Model)
+{
+    <tr>
+        <td>@teklif.TeklifID</td>
+        <td>@teklif.MusteriID</td>
+        <td>@teklif.AracıKurumID</td>
+        <td>@teklif.ÜrünID</td>
+@*         <td>@teklif.Adet</td>
+        <td>@teklif.Birim</td> *@
+        <td>@teklif.BirimFiyat</td>
+        <td>@teklif.ToplamFiyat</td>
+        <td>@teklif.OlusturmaZamanı</td>
+        <td>@teklif.GüncellemeZamanı</td>
+        <td>@(teklif.Aktif ? "Evet" : "Hayır")</td>
+        <td>@(teklif.Pasif ? "Evet" : "Hayır")</td>
+    </tr>
+}
+ 

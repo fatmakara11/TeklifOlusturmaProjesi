@@ -70,7 +70,7 @@ namespace ORM.DB.Repository
             }
         }
 
-        public async Task UpdateStok(Guid ÜrünID, int adet)
+        public async Task UpdateStok(Guid ÜrünID, int Adet)
         {
             using (var connection = _context.CreateConnection())
             {
@@ -79,7 +79,7 @@ namespace ORM.DB.Repository
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@ÜrünID", ÜrünID);
-                parameters.Add("@Adet", adet);
+                parameters.Add("@Adet", Adet);
 
                 await connection.ExecuteAsync(query, parameters);
             }
