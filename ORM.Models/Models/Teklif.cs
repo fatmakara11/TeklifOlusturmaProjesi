@@ -20,6 +20,7 @@ namespace ORM.Models.Models
         public DateTime GüncellemeZamanı { get; set; }
         public bool Aktif { get; set; }
         public bool Pasif { get; set; }
+        
 
     }
 }

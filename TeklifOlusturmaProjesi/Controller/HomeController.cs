@@ -75,7 +75,7 @@ namespace TeklifOlusturmaProjesi.Controllers
                 var ret = _teklifRepository.GetAllByCustomQuery(w).ToList();
 
                 return PartialView("_PartialTeklifOlusturma", ret);
-            } 
+            }
 
             // Tüm teklifleri yeniden veritabanından çekin ve tabloyu güncellemek için ViewBag'e atayın
             var teklifler = await _teklifRepository.GetAllTekliflerAsync();
